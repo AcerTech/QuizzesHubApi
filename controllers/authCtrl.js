@@ -4,12 +4,6 @@ const _ = require('lodash');
 const { User } = require('../models/user');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer')
-// const mongoose = require('mongoose');
-// const express = require('express');
-// const { use } = require('../api');
-// const router = express.Router();
-
-
 
 exports.login = async (req, res) => {
   const { error } = validate(req.body);
@@ -17,7 +11,7 @@ exports.login = async (req, res) => {
 
   let user = await User.findOne({ email: req.body.email });
   if (!user) return res.status(400).send('Invalid email or password.');//we dont to tell the user if user is exist.
-  if ( !user.isActive) return res.status(400).send('user account is not confirmed yet, check your email and confirm.');//we dont to tell the user if user is exist.
+  if (!user.isActive) return res.status(400).send('user account is not confirmed yet, check your email and confirm.');//we dont to tell the user if user is exist.
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(400).send('Invalid email or password.');
@@ -28,7 +22,7 @@ exports.login = async (req, res) => {
     id: user._id,
     name: user.name,
     email: user.email,
-    imgUrl:user.imgUrl,
+    imgUrl: user.imgUrl,
     role: user.role
   }
   await res.status(200).send({ token: token, userInfo: userInfo })
@@ -55,8 +49,6 @@ exports.forgotPassword = async (req, res) => {
   await res.status(204).send('OK') //10/20/2020
 
 }
-
-
 
 //========================================
 // Reset Password Route
@@ -87,7 +79,7 @@ exports.resetPassword = async (req, res) => {
     id: user._id,
     name: user.name,
     email: user.email,
-    imgUrl:user.imgUrl,
+    imgUrl: user.imgUrl,
     role: user.role
   }
 
@@ -118,10 +110,10 @@ function validateEmail(user) {
 // function sendEmail(req, resetToken) {
 //   // const mg = mailgun({ apiKey: process.env.MAILGUN_KEY, domain: MAILGUN_DOMAIN });
 //   const mailgun = require("mailgun-js");
-//   const DOMAIN = "sandboxfb3c6b0760044524afc655e51f598b17.mailgun.org";
-//   const mg = mailgun({ apiKey: "67a4a5f13f59de53553cc83fbf6905b1-0d2e38f7-8d82c125", domain: DOMAIN });
+//   const DOMAIN = "sandboxXXXXXXXXXXXXXXX.mailgun.org";
+//   const mg = mailgun({ apiKey: "api key here", domain: DOMAIN });
 //   const data = {
-//     from: "Mailgun Sandbox <postmaster@sandboxfb3c6b0760044524afc655e51f598b17.mailgun.org>",
+//     from: "Mailgun Sandbox <postmaster@sandboxXXXXXXXXXXXXXXX.mailgun.org>",
 //     to: req.body.email,
 //     subject: "Hello",
 //     html: `<h2>Please click on the link below to reset your password</h2>
@@ -153,10 +145,11 @@ function sendResetPasswordEmail(req, resetToken) {
     subject: 'Reset password link!',
     html: `
     <h2>Please click on the link below to reset your password</h2>
-    <a href="http://localhost:4200/reset-password/${resetToken}">Click here</a>
+    < a href="https://quizzeshubweb.web.app/reset-password/${token}" > <h3>Click here</h3></a>
     `
 
-    //<a href="https://ezlearnweb.web.app/reset-password/${resetToken}">Click here</a>
+    // < a href="https://quizzeshubapi.herokuapp.com/reset-password/${resetToken}" > <h3>Click here</h3></a>
+    // < a href="http://localhost:4200/reset-password/${resetToken}" > Click here</a>
     // < a href="http://${req.headers.host}/reset-password/${resetToken}" > Click here</a>
   };
 
@@ -179,8 +172,8 @@ function sendResetPasswordEmail(req, resetToken) {
 //     port: 465,
 //     secure: true,
 //     auth: {
-//       user: 'acerTech20@gmail.com',
-//       pass: 'Sarah2006@'
+//       user: 'xxxxx@gmail.com',
+//       pass: 'xxxxxx@'
 //     }
 //   });
 

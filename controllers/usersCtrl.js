@@ -67,6 +67,7 @@ exports.register = async (req, res) => {
 };
 
 
+
 exports.resendConfirmationEmail = async (req, res) => {
 
   try {
@@ -136,7 +137,7 @@ exports.updateUserInfo = async (req, res) => {
     let user = await User.findById(req.params.id);
     if (!user) return res.status(400).send('User is not found.');
     //********* Here we check if the user updated his email
-    let _email= "";
+    let _email = "";
     if (user.email === req.body.email) {//user not changed his email.
       console.log('same email')
       _email = user.email
@@ -166,7 +167,7 @@ exports.updateUserInfo = async (req, res) => {
       role: user.role
     }
     // await res.status(204).send(user);
-     res.send({ userInfo: userInfo })
+    res.send({ userInfo: userInfo })
 
   } catch (error) {
     for (field in error.errors)
@@ -210,11 +211,11 @@ function sendConfirmationEmail(req, token) {
     subject: 'Email Confirmation link!',
     html: `
     <h2>Please click on the link below to confirm your emial</h2>
-    <a href="http://localhost:4200/confirm/${token}">CLICK HERE TO CONFIRM</a>
+     < a href="https://quizzeshubweb.web.app/confirm/${token}" > <h3>CLICK HERE TO CONFIRM</h3></a>
     `
-    // < a href="http://${req.headers.host}/reset-password/${resetToken}" > Click here</a>
-
-    // < a href="https://ezlearnweb.web.app/confirm/${token}" > CLICK HERE TO CONFIRM</a>
+    // < a href="http://${req.headers.host}/reset-password/${resetToken}" > CLICK HERE TO CONFIRM</a>
+    // < a href="https://quizzeshubweb.web.app/confirm/${token}" > <h3>CLICK HERE TO CONFIRM</h3></a>
+    // <a href="http://localhost:4200/confirm/${token}">CLICK HERE TO CONFIRM</a>
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
