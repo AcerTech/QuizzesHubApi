@@ -1,4 +1,7 @@
 let { Book, validate } = require('../models/book');
+const { Chapter } = require('../models/chapter');
+const { Question } = require('../models/question');
+const { Quiz } = require('../models/quiz');
 let { User } = require('../models/user');
 
 exports.getUserBooks = async (req, res) => {
@@ -100,6 +103,10 @@ exports.delete = async (req, res) => {
     try {
         const book = await Book.findByIdAndRemove(req.params.id);
         if (!book) return res.status(404).send('The Book with the given ID was not found.');
+        const quiz = await Quiz.deleteMany({ 'book._id': req.params.id });
+        const question = await Question.deleteMany({ 'book._id': req.params.id });
+        const chapter = await Chapter.deleteMany({ 'book._id': req.params.id });
+
         res.send(book);
     } catch (ex) {
         for (field in ex.errors)

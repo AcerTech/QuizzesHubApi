@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const { User, validate } = require('../models/user');
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+const { error } = require('winston');
 // const mongoose = require('mongoose');
 // const express = require('express');
 // const router = express.Router();
@@ -67,21 +68,21 @@ exports.register = async (req, res) => {
 
 
 exports.resendConfirmationEmail = async (req, res) => {
- 
+
   try {
     // const { error } = validateEmail(req.body);
     // if (error) return res.status(400).send(error.details[0].message);
     // console.log('resend confirm email ' + req.body.email)
     let user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(400).send('Invalid email.');//we dont to tell the user if user is exist.
-    
+
     if (user.isActive) return res.status(400).send('Acount is already activited!');
     const salt = await bcrypt.genSalt(10);
 
     const confirmationToken = jwt.sign({ _id: user._id }, process.env.JWT_RESET_PW_KEY, { expiresIn: "30m" });
     user.confirmationToken = confirmationToken;
-  
-    await user.save();
+
+    // await user.save();
     await user.save(function (err, doc) {
       if (err) {
         console.error(err)
@@ -125,31 +126,47 @@ exports.confirm = async (req, res) => {
 
 exports.updateUserInfo = async (req, res) => {
   try {
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
+    // console.log(req.body)
+    // const { error } = validateUserInfoUpdate(req.body);
+    // // if (error) return res.status(400).send(error.details[0].message);
+    // if (error!=undefined) {
+    //   console.log(error);
+    //   return res.status(400).send(error.details[0].message);
+    // }
     let user = await User.findById(req.params.id);
     if (!user) return res.status(400).send('User is not found.');
+    //********* Here we check if the user updated his email
+    let _email= "";
+    if (user.email === req.body.email) {//user not changed his email.
+      console.log('same email')
+      _email = user.email
+    } else {//if user changed his email, then check if the new email been used by another user.
+      let isEmailAlreadyUsed = await User.find({ email: req.body.email });
+      if (isEmailAlreadyUsed) return res.status(400).send('This Email is been used by other user.');
+      _email = req.body.email
+    }
+    //************ */
+    user.name = req.body.name;
+    user.email = _email;
+    user.imgUrl = req.body.imgUrl;
 
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) return res.status(400).send('Invalid password.');
-    user = {
+    await user.save(function (err, doc) {
+      if (err) {
+        console.error(err)
+        return res.status(400).send(err);
+      }
+      console.log('User info been updated')
+    });
+
+    const userInfo = {
       id: user._id,
-      name: user.name,
-      email: user.email,
-      imgUrl: user.imgUrl,
+      name: req.body.name,
+      email: _email,
+      imgUrl: req.body.imgUrl,
       role: user.role
     }
-    //will login the user after register rightaway
-    const token = user.generateAuthToken();//check the user.js to see the implementation for this method.
-    // res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email', 'role']));
-    await res.status(200).json({ user: _.pick(user, ['_id', 'name', 'email', 'role', 'imgUrl']), token: token })
-    user = await User.update({ _id: req.params.id }, user, function (err, raw) {
-      if (err) {
-        res.send(err);
-      }
-      return res.status(204).send('The Chapter been updated');
-    })
+    // await res.status(204).send(user);
+     res.send({ userInfo: userInfo })
 
   } catch (error) {
     for (field in error.errors)
@@ -166,6 +183,13 @@ function validateEmail(reqBody) {
   return schema.validate(reqBody);
 }
 
+function validateUserInfoUpdate(reqBody) {
+  const schema = Joi.object({
+    name: Joi.string().min(2).max(50).required(),
+    email: Joi.string().min(5).max(255).required().email()
+  });
+  return schema.validate(reqBody);
+}
 
 function sendConfirmationEmail(req, token) {
   console.log('email should sent')
