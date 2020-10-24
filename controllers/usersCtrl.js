@@ -211,7 +211,7 @@ function sendConfirmationEmail(req, token) {
     subject: 'Email Confirmation link!',
     html: `
     <h2>Please click on the link below to confirm your emial</h2>
-     < a href="https://quizzeshubweb.web.app/confirm/${token}">CLICK HERE TO CONFIRM</a>
+     <a href="https://quizzeshubweb.web.app/confirm/${token}"><h3>CLICK HERE TO CONFIRM</h3></a>
     `
     // < a href="http://${req.headers.host}/reset-password/${resetToken}" > CLICK HERE TO CONFIRM</a>
     // < a href="https://quizzeshubweb.web.app/confirm/${token}" > <h3>CLICK HERE TO CONFIRM</h3></a>

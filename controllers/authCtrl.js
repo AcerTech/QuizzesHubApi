@@ -145,7 +145,7 @@ function sendResetPasswordEmail(req, token) {
     subject: 'Reset password link!',
     html: `
     <h2>Please click on the link below to reset your password</h2>
-    < a href="https://quizzeshubweb.web.app/reset-password/${token}">Click here</a>
+    <a href="https://quizzeshubweb.web.app/reset-password/${token}"> <h3>Click here</h3></a>
     `
 
     // < a href="https://quizzeshubapi.herokuapp.com/reset-password/${resetToken}" > <h3>Click here</h3></a>
