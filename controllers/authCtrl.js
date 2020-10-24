@@ -126,7 +126,7 @@ function validateEmail(user) {
 // }
 
 //nodemailer
-function sendResetPasswordEmail(req, resetToken) {
+function sendResetPasswordEmail(req, token) {
 
   var transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
