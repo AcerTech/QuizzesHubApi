@@ -3,8 +3,6 @@ const auth = require('../../middleware/auth');
 const router = express.Router();
 
 router.use('/quizzes', auth, require('./quizzes'));
-router.use('/grades', auth, require('./grades'));
-router.use('/subjects', auth, require('./subjects'));
 router.use('/questions', auth, require('./questions'));
 router.use('/questionsTypes', auth, require('./questionsTypes'));
 router.use('/answers', auth, require('./answers'));

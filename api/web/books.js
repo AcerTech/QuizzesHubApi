@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const bookCtrl = require('../../controllers/bookCtrl');
+const bookCtrl = require('../../controllers-web/bookCtrl');
 const admin = require('../../middleware/admin');
 
 router.get('/mybooks/:id', bookCtrl.getUserBooks)

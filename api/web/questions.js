@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const questionCtrl = require('../../controllers/questionCtrl');
+const questionCtrl = require('../../controllers-web/questionCtrl');
 const admin = require('../../middleware/admin');
 
 router.get('/', questionCtrl.get)

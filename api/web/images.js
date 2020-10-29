@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const imageCtrl = require('../../controllers/imageCtrl');
+const imageCtrl = require('../../controllers-web/imageCtrl');
 const admin = require('../../middleware/admin');
 
 router.get('/:userId', imageCtrl.get)

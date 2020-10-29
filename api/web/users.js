@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const usersCtrl = require('../../controllers/usersCtrl');
+const usersCtrl = require('../../controllers-web/usersCtrl');
 const auth = require('../../middleware/auth');
 
 router.get('/me',auth , usersCtrl.get)

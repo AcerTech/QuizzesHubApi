@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const answerCtrl = require('../../controllers/answerCtrl');
+const answerCtrl = require('../../controllers-web/answerCtrl');
 
 router.get('/', answerCtrl.get)
 router.get('/:id', answerCtrl.getById)

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const questionTypeCtrl = require('../../controllers/questionTypeCtrl');
+const questionTypeCtrl = require('../../controllers-web/questionTypeCtrl');
 const admin = require('../../middleware/admin');
 
 router.get('/', questionTypeCtrl.get)

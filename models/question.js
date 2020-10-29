@@ -31,7 +31,7 @@ const questionSchema = new mongoose.Schema({
         type: new mongoose.Schema({
             name: {
                 type: String,
-                required: true
+                required: false
             }
         })
     },
@@ -57,7 +57,7 @@ function validateQuestion(question) {
         columnsCount: Joi.number().default(0),
 
         answers: Joi.array(),
-        questionTypeId: Joi.objectId().required(),
+        questionTypeId: Joi.objectId(),
         bookId: Joi.objectId().required(),
         quizId: Joi.objectId().required(),
         chapterId: Joi.objectId().required()

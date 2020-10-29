@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const chapterCtrl = require('../../controllers/chapterCtrl');
+const chapterCtrl = require('../../controllers-web/chapterCtrl');
 const admin = require('../../middleware/admin');
 
 router.get('/bookChapters/:id', chapterCtrl.get)
