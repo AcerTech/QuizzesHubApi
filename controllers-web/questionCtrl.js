@@ -117,6 +117,7 @@ exports.add = async (req, res) => {
         columnsCount: req.body.columnsCount,
         isActive: req.body.isActive,
         answers: req.body.answers,
+
         book: {
             _id: book._id,
             title: book.title
@@ -135,7 +136,6 @@ exports.add = async (req, res) => {
         }
     });
 
-    console.log(question)
     try {
         question = await question.save();
         await res.send(question);
@@ -150,7 +150,6 @@ exports.add = async (req, res) => {
 
 exports.update = async (req, res) => {
 
-    console.log(req.body)
     if (req.body._id) {
         delete req.body._id
     }
