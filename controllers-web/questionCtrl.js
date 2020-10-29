@@ -105,8 +105,8 @@ exports.add = async (req, res) => {
     const chapter = await Chapter.findById(req.body.chapterId);//we should get it with the body
     if (!chapter) return res.status(400).send('Invalid Chapter.');
     // console.log(chapter)
-    // const questionType = await QuestionType.findById(req.body.questionTypeId);//we should get it with the body
-    // if (!questionType) return res.status(400).send('Invalid Question Type.');
+    const questionType = await QuestionType.findById(req.body.questionTypeId);//we should get it with the body
+    if (!questionType) return res.status(400).send('Invalid Question Type.');
     // console.log(questionType)
 
     let question = new Question({
@@ -117,7 +117,6 @@ exports.add = async (req, res) => {
         columnsCount: req.body.columnsCount,
         isActive: req.body.isActive,
         answers: req.body.answers,
-
         book: {
             _id: book._id,
             title: book.title
@@ -130,10 +129,10 @@ exports.add = async (req, res) => {
             _id: chapter._id,
             name: chapter.name
         },
-        // questionType: {
-        //     _id: questionType._id,
-        //     name: questionType.name
-        // }
+        questionType: {
+            _id: questionType._id,
+            name: questionType.name
+        }
     });
 
     console.log(question)
@@ -173,8 +172,8 @@ exports.update = async (req, res) => {
     const chapter = await Chapter.findById(req.body.chapterId);//we should get it with the body
     if (!chapter) return res.status(400).send('Invalid Chapter.');
 
-    // const questionType = await QuestionType.findById(req.body.questionTypeId);//we should get it with the body
-    // if (!questionType) return res.status(400).send('Invalid Question Type.');
+    const questionType = await QuestionType.findById(req.body.questionTypeId);//we should get it with the body
+    if (!questionType) return res.status(400).send('Invalid Question Type.');
 
 
 
@@ -211,10 +210,10 @@ exports.update = async (req, res) => {
             _id: chapter._id,
             name: chapter.name
         },
-        // questionType: {
-        //     _id: questionType._id,
-        //     name: questionType.name
-        // }
+        questionType: {
+            _id: questionType._id,
+            name: questionType.name
+        }
     };
     // console.log(question)
 
