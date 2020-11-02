@@ -44,7 +44,8 @@ exports.add = async (req, res) => {
         isActive: req.body.isActive,
         user: {
             _id: user._id,
-            name: user.name
+            name: user.name,
+            imgUrl:user.imgUrl
         }
     });
 
@@ -67,29 +68,43 @@ exports.update = async (req, res) => {
     let book = await Book.findById(req.params.id)
     if (!book) return res.status(404).send('The Book with the given ID was not found.');
 
+    const user = await User.findById(book.user._id)
+    if (!user) return res.status(404).send('The user with the given ID was not found.');
 
     if (req.body._id) {
         delete req.body._id
     }
 
-    // book = {
-    //     title: req.body.title,
-    //     tags: req.body.tags,
-    //     imgUrl: req.body.imgUrl,
-    //     description: req.body.description,
-    //     isActive: req.body.isActive,
-    // };
+    book = {
+        title: req.body.title,
+        tags: req.body.tags,
+        imgUrl: req.body.imgUrl,
+        description: req.body.description,
+        isActive: req.body.isActive,
+        user: {
+            _id: user._id,
+            name: user.name,
+            imgUrl:user.imgUrl
+        }
+    };
 
 
-    Object.entries(req.body).forEach((item) => {
-        const key = item[0];
-        const value = item[1];
-        book[key] = value
-    })
+    // Object.entries(req.body).forEach((item) => {
+    //     const key = item[0];
+    //     const value = item[1];
+    //     book[key] = value
+    // })
 
     try {
-        book = await book.save();
-        res.status(200).send(book);
+        // book = await book.save();
+        // res.status(200).send(book);
+        book = await Book.update({ _id: req.params.id }, book, function (err, raw) {
+            if (err) {
+                res.send(err);
+            }
+            return res.status(204).send('The Book been updated');
+        })
+
 
     } catch (ex) {
         for (field in ex.errors)
