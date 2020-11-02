@@ -82,6 +82,8 @@ exports.update = async (req, res) => {
     let chapter = await Chapter.findById(req.params.id)
     if (!chapter) return res.status(404).send('The chapter with the given ID was not found.');
 
+
+
     if (req.body._id) {
         delete req.body._id
     }
@@ -103,6 +105,22 @@ exports.update = async (req, res) => {
             title: book.title
         }
     };
+
+    let question = await Question.updateMany({ 'book._id': req.body.bookId, 'chapter._id': req.params.id }, {
+        chapter: {
+            _id: req.params.id,
+            name: req.body.name,
+            isActive: req.body.isActive,
+            description: req.body.description,
+            displayOrder: req.body.displayOrder,
+        }
+    }, function (err, raw) {
+        if (err) {
+            console.log(err)
+            res.send(err);
+        }
+        console.log('all questions are updated')
+    });
 
 
     try {
@@ -126,7 +144,7 @@ exports.delete = async (req, res) => {
         if (!chapter) return res.status(404).send('The Chapter with the given ID was not found.');
         const quiz = await Quiz.deleteMany({ 'chapter._id': req.params.id });
         const question = await Question.deleteMany({ 'chapter._id': req.params.id });
-        
+
         res.send(chapter);
     } catch (ex) {
         for (field in ex.errors)

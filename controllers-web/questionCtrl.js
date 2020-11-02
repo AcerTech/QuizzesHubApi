@@ -1,11 +1,10 @@
 const { Question, validate } = require('../models/question');
 const { QuestionType } = require('../models/questionType');
 const { Quiz } = require('../models/quiz');
-const { Subject } = require('../models/subject');
 const { Chapter } = require('../models/chapter');
 const { Book } = require('../models/book');
 // const { answerSchema, Answer } = require('../models/answer');
-const { Grade } = require('../models/grade')
+
 // const { Subject } = require('../model/subject')
 
 
@@ -63,14 +62,14 @@ exports.getQuestionsByBookId = async (req, res) => {
     try {
         const question = await Question
             .find({ 'book._id': req.params.id })
-        // .populate('subject', 'name -_id')
+        //  .populate('chapter', 'name isActive -_id')
         // .populate('quiz', 'name -_id')
+        // console.log(question)
         res.send(question);
     } catch (ex) {
         for (field in ex.errors)
             console.log(ex.errors[field].message)
     }
-
 }
 
 exports.getQuestionsByChapterId = async (req, res) => {
@@ -117,18 +116,26 @@ exports.add = async (req, res) => {
         columnsCount: req.body.columnsCount,
         isActive: req.body.isActive,
         answers: req.body.answers,
-
+        // book: book,
+        // quiz: quiz,
+        // chapter: chapter,
+        // questionType: questionType
         book: {
             _id: book._id,
-            title: book.title
+            title: book.title,
+            isActive: book.isActive,
         },
         quiz: {
             _id: quiz._id,
-            name: quiz.name
+            name: quiz.name,
+            isActive: quiz.isActive,
+            displayOrder: quiz.displayOrder
         },
         chapter: {
             _id: chapter._id,
-            name: chapter.name
+            name: chapter.name,
+            isActive: chapter.isActive,
+            displayOrder: chapter.displayOrder
         },
         questionType: {
             _id: questionType._id,
@@ -196,18 +203,26 @@ exports.update = async (req, res) => {
         isActive: req.body.isActive,
         answers: req.body.answers,
 
-
+        // book: book,
+        // quiz: quiz,
+        // chapter: chapter,
+        // questionType:questionType
         book: {
             _id: book._id,
-            title: book.title
+            title: book.title,
+            isActive: book.isActive,
         },
         quiz: {
             _id: quiz._id,
-            name: quiz.name
+            name: quiz.name,
+            isActive: quiz.isActive,
+            displayOrder: quiz.displayOrder
         },
         chapter: {
             _id: chapter._id,
-            name: chapter.name
+            name: chapter.name,
+            isActive: chapter.isActive,
+            displayOrder: chapter.displayOrder
         },
         questionType: {
             _id: questionType._id,

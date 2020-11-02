@@ -1,13 +1,13 @@
 let { Quiz, validate } = require('../models/quiz');
 let { Chapter } = require('../models/chapter');
-let { Book} = require('../models/book');
+let { Book } = require('../models/book');
 const { Question } = require('../models/question');
 
 exports.get = async (req, res) => {
 
 
    try {
-      const quiz = await Quiz.find({"book._id":req.params.bookid});
+      const quiz = await Quiz.find({ "book._id": req.params.bookid });
       res.send(quiz);
    } catch (ex) {
       for (field in ex.errors)
@@ -57,7 +57,7 @@ exports.add = async (req, res) => {
       displayOrder: req.body.displayOrder,
       chapter: {
          _id: chapter._id,
-         name: chapter.name
+         name: chapter.name,
       },
       book: {
          _id: book._id,
@@ -107,7 +107,25 @@ exports.update = async (req, res) => {
          title: book.title
       }
    };
-   
+
+   let question = await Question.updateMany({ 'book._id': req.body.bookId, 'quiz._id': req.params.id }, {
+      quiz: {
+         _id: req.params.id,
+         name: req.body.name,
+         isActive: req.body.isActive,
+         description: req.body.description,
+         displayOrder: req.body.displayOrder,
+      }
+   }, function (err, raw) {
+      if (err) {
+         console.log(err)
+         res.send(err);
+      }
+      console.log('all questions are updated')
+   });
+
+
+
    try {
       quiz = await Quiz.update({ _id: req.params.id }, quiz, function (err, raw) {
          if (err) {
@@ -126,8 +144,8 @@ exports.delete = async (req, res) => {
    try {
       const quiz = await Quiz.findByIdAndRemove(req.params.id);
       if (!quiz) return res.status(404).send('The Quiz with the given ID was not found.');
-      const question = await Question.deleteMany({'quiz._id':req.params.id});
-     
+      const question = await Question.deleteMany({ 'quiz._id': req.params.id });
+
       res.send(quiz);
    } catch (ex) {
       for (field in ex.errors)

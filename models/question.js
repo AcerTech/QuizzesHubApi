@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 const { answerSchema, Answer } = require('./answer');
+const { ChapterSchema } = require('./chapter');
+const { quizSchema } = require('./quiz');
+const { bookSchema } = require('./book');
 
 
 const questionSchema = new mongoose.Schema({
@@ -11,22 +14,26 @@ const questionSchema = new mongoose.Schema({
     displayOrder: { type: String, default: '000', max: 255 },
     columnsCount: { type: Number, default: 0, max: 255 },
     isActive: { type: Boolean, default: true },
-    book: {
-        type: new mongoose.Schema({
-            title: {
-                type: String,
-                required: true
-            }
-        })
-    },
-    quiz: {
-        type: new mongoose.Schema({
-            name: {
-                type: String,
-                required: true
-            }
-        })
-    },
+    book:bookSchema,
+    // book: {
+    //     type: new mongoose.Schema({
+    //         title: {
+    //             type: String,
+    //             required: true
+    //         },
+    //         isActive: { type: Boolean }
+    //     })
+    // },
+    quiz: quizSchema,
+    // quiz: {
+    //     type: new mongoose.Schema({
+    //         name: {
+    //             type: String,
+    //             required: true
+    //         },
+    //         isActive: { type: Boolean }
+    //     })
+    // },
     questionType: {
         type: new mongoose.Schema({
             name: {
@@ -35,14 +42,17 @@ const questionSchema = new mongoose.Schema({
             }
         })
     },
-    chapter: {
-        type: new mongoose.Schema({
-            name: {
-                type: String,
-                required: true
-            }
-        })
-    },
+    chapter: ChapterSchema,
+    // chapter: {
+    //     type: new mongoose.Schema({
+    //         name: {
+    //             type: String,
+    //             required: true
+    //         },
+    //         isActive: { type: Boolean }
+
+    //     })
+    // },
     answers: [answerSchema]
 });
 
