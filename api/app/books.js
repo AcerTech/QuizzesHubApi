@@ -6,7 +6,7 @@ const admin = require('../../middleware/admin');
 
 router.get('/', bookCtrl.getBooks)
 router.get('/:id', bookCtrl.getById)
-// router.post('/', bookCtrl.add)
+router.post('/search', bookCtrl.search)
 // router.delete('/:id', bookCtrl.delete)
 // router.put('/:id', bookCtrl.update)
 

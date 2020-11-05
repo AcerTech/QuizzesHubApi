@@ -7,7 +7,7 @@ let { Book, validate } = require('../models/book');
 exports.getBooks = async (req, res) => {
     console.log(req.body)
     try {
-        const book = await Book.find({ isActive: true });
+        const book = await Book.find({ isActive: true }).sort({ _id: -1 }).limit(50);//Get 10 latest documents
         res.send(book);
     } catch (ex) {
         for (field in ex.errors)
@@ -26,3 +26,32 @@ exports.getById = async (req, res) => {
     }
 
 }
+
+
+exports.search = async (req, res) => {
+
+    if (req.body.searchTerm.trim() == '') {
+        next();
+        return;
+    }
+
+    var toSearch = req.body.searchTerm.split(" ").map(function (n) {
+        return {
+            searchTerm: new RegExp(n.trim())
+        };
+    });
+    const books = await Book.find({
+        userId: req.body.userId
+        , "$or": [{ "title": { $regex: req.body.searchTerm } }, { "tags": { $regex: req.body.searchTerm } }]
+    });
+
+    if (!books) return res.status(404).send('Not found.');
+
+    try {
+        res.send(books);
+    } catch (ex) {
+        for (field in ex.errors)
+            console.log(ex.errors[field].message)
+    }
+
+};

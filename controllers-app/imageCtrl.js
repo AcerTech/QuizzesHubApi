@@ -28,7 +28,7 @@ exports.searchByTags = async (req, res, next) => {
         });
         // const image = await Image.find({ tags: { $regex: '.*' + req.body.tags + '.*' } });
         // const image = await Image.find({ tags: { $tagsIndex: '*'+ req.body.tags+'*' } });
-        console.log(image)
+        // console.log(image)
         res.send(image);
     } catch (ex) {
         for (field in ex.errors)
