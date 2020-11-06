@@ -35,14 +35,15 @@ exports.search = async (req, res) => {
         return;
     }
 
-    var toSearch = req.body.searchTerm.split(" ").map(function (n) {
-        return {
-            searchTerm: new RegExp(n.trim())
-        };
-    });
+    // var toSearch = req.body.searchTerm.split(" ").map(function (n) {
+    //     return {
+    //         searchTerm: new RegExp(n.trim())
+    //     };
+    // });
+
     const books = await Book.find({
-        userId: req.body.userId
-        , "$or": [{ "title": { $regex: req.body.searchTerm } }, { "tags": { $regex: req.body.searchTerm } }]
+        isActive: true,
+        "$or": [{ "title": { $regex: req.body.searchTerm, "$options": "i" } }, { "tags": { $regex: req.body.searchTerm, "$options": "i" } }]
     });
 
     if (!books) return res.status(404).send('Not found.');

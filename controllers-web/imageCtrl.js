@@ -24,7 +24,7 @@ exports.searchByTags = async (req, res, next) => {
         //{"$or": [ { "fullname" : { $regex: criteria }}, { "email" : { $regex: criteria }}, { "login" : { $regex: criteria }}]}
         const image = await Image.find({
             userId: req.body.userId
-            , "$or": [{ "tags": { $regex: req.body.tags } }, { "name": { $regex: req.body.tags } }]
+            , "$or": [{ "tags": { $regex: req.body.tags, "$options": "i" } }, { "name": { $regex: req.body.tags, "$options": "i" } }]
         });
         // const image = await Image.find({ tags: { $regex: '.*' + req.body.tags + '.*' } });
         // const image = await Image.find({ tags: { $tagsIndex: '*'+ req.body.tags+'*' } });
